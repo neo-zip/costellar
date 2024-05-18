@@ -1,6 +1,9 @@
 'use client';
 
-import { createContext, useState } from 'react';
+import { log } from '@/lib/util';
+import { createContext, useMemo, useState } from 'react';
+
+const initial: Ideas.Idea[] = typeof window !== 'undefined' ? JSON.parse(window.localStorage.getItem('ideas') ?? '[]') : [];
 
 interface IdeasValues {
 	addIdea: (idea: Ideas.Idea) => void;
@@ -10,16 +13,28 @@ interface IdeasValues {
 	ideas: Ideas.Idea[];
 }
 
-export const IdeaContext = createContext<IdeasValues>({
-	ideas: [],
+export const IdeasContext = createContext<IdeasValues>({
+	ideas: initial,
 	addIdea: () => {},
 	getIdea: () => undefined,
 	editIdea: () => {},
 	deleteIdea: () => {},
 });
 
-export const IdeaProvider = ({ children }: { children: React.ReactNode }) => {
-	const [ideas, setIdeas] = useState<Ideas.Idea[]>([]);
+export const IdeasProvider = ({ children }: { children: React.ReactNode }) => {
+	const [ideas, setIdeas] = useState<Ideas.Idea[]>(initial);
+
+	console.log(ideas);
+
+	useMemo(() => {
+		if (typeof window === 'undefined') {
+			log('Not available');
+			return;
+		}
+
+		window.localStorage.setItem('ideas', JSON.stringify(ideas));
+		log('Saved Ideas');
+	}, [ideas]);
 
 	const addIdea = (idea: Ideas.Idea) => {
 		setIdeas([...ideas, idea]);
@@ -37,5 +52,5 @@ export const IdeaProvider = ({ children }: { children: React.ReactNode }) => {
 		setIdeas(ideas.filter((idea) => idea.id === id));
 	};
 
-	return <IdeaContext.Provider value={{ addIdea, getIdea, editIdea, deleteIdea, ideas }}>{children}</IdeaContext.Provider>;
+	return <IdeasContext.Provider value={{ addIdea, getIdea, editIdea, deleteIdea, ideas }}>{children}</IdeasContext.Provider>;
 };

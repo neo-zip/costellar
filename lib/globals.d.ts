@@ -11,7 +11,8 @@ namespace Theme {
 
 namespace Ideas {
 	interface Idea {
-		name: '';
+		name: string;
+		description: string;
 		id: number;
 		tag: Tags | Tags[];
 	}
