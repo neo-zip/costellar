@@ -296,6 +296,7 @@ button {
 
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
 
   background-color: var(--button-color-low);
@@ -422,7 +423,7 @@ button {
 
 /* mantine */
 
-/* 
+
 
 .mantine-Tooltip-tooltip {
   font-family: var(--font-primary);
@@ -477,6 +478,7 @@ button {
   display: flex;
   gap: 10px;
   align-items: center;
+  justify-content: space-between;
 
   border: 3px solid var(--link);
 
@@ -555,4 +557,4 @@ button {
 
 .mantine-Modal-title {
   font-size: 2em;
-} */
+}
