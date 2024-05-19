@@ -1,20 +1,18 @@
 'use client';
 
 import { log } from '@/lib/util';
-import { createContext, useMemo, useState } from 'react';
-
-const initial: Ideas.Idea[] = typeof window !== 'undefined' ? JSON.parse(window.localStorage.getItem('ideas') ?? '[]') : [];
+import { createContext, useEffect, useState } from 'react';
 
 interface IdeasValues {
 	addIdea: (idea: Ideas.Idea) => void;
 	getIdea: (id: number) => Ideas.Idea | undefined;
 	editIdea: (id: number, updatedIdea: Ideas.Idea) => void;
 	deleteIdea: (id: number) => void;
-	ideas: Ideas.Idea[];
+	ideas: Ideas.Idea[] | null;
 }
 
 export const IdeasContext = createContext<IdeasValues>({
-	ideas: initial,
+	ideas: null,
 	addIdea: () => {},
 	getIdea: () => undefined,
 	editIdea: () => {},
@@ -22,13 +20,19 @@ export const IdeasContext = createContext<IdeasValues>({
 });
 
 export const IdeasProvider = ({ children }: { children: React.ReactNode }) => {
-	const [ideas, setIdeas] = useState<Ideas.Idea[]>(initial);
+	const [ideas, setIdeas] = useState<Ideas.Idea[] | null>(null);
 
 	console.log(ideas);
 
-	useMemo(() => {
+	useEffect(() => {
 		if (typeof window === 'undefined') {
-			log('Not available');
+			log('Cannot access localstorage on server: skipping data.');
+			return;
+		}
+
+		if (!ideas) {
+			setIdeas(JSON.parse(window.localStorage.getItem('ideas') ?? '[]'));
+			log('Loaded Ideas');
 			return;
 		}
 
@@ -37,18 +41,34 @@ export const IdeasProvider = ({ children }: { children: React.ReactNode }) => {
 	}, [ideas]);
 
 	const addIdea = (idea: Ideas.Idea) => {
+		if (!ideas) {
+			return;
+		}
+
 		setIdeas([...ideas, idea]);
 	};
 
 	const getIdea = (id: number): Ideas.Idea | undefined => {
+		if (!ideas) {
+			return;
+		}
+
 		return ideas.find((idea) => idea.id === id);
 	};
 
 	const editIdea = (id: number, updatedIdea: Ideas.Idea) => {
-		setIdeas((prevIdeas) => prevIdeas.map((idea, index) => (index === id ? updatedIdea : idea)));
+		if (!ideas) {
+			return;
+		}
+
+		setIdeas(ideas.map((idea, index) => (index === id ? updatedIdea : idea)));
 	};
 
 	const deleteIdea = (id: number) => {
+		if (!ideas) {
+			return;
+		}
+
 		setIdeas(ideas.filter((idea) => idea.id === id));
 	};
 

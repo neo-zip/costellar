@@ -7,9 +7,14 @@ import Card from './Card';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import styles from './page.module.css';
+import Loading from '../loading';
 
 const Dashboard: React.FC = () => {
 	const { ideas, addIdea } = useContext(IdeasContext);
+
+	if (!ideas) {
+		return <Loading />;
+	}
 
 	const handleAddIdea = () => {
 		modals.open({
