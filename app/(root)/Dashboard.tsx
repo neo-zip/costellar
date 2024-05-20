@@ -2,7 +2,6 @@
 
 import { IdeasContext } from '@/providers/Ideas';
 import React, { useContext } from 'react';
-import { Grid } from '@mantine/core';
 import Card from './Card';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
@@ -13,12 +12,16 @@ const Dashboard: React.FC = () => {
 	const { ideas, addIdea } = useContext(IdeasContext);
 
 	if (!ideas) {
-		return <Loading />;
+		return (
+			<div className='center full'>
+				<Loading />
+			</div>
+		);
 	}
 
 	const handleAddIdea = () => {
 		modals.open({
-			title: 'Adding Course',
+			title: 'Adding Idea',
 			children: (
 				<form
 					className='flex-col'
@@ -54,27 +57,20 @@ const Dashboard: React.FC = () => {
 		});
 	};
 
-	return ideas.length > 0 ? (
-		<div className={styles.grid}>
-			{ideas.map((idea: Ideas.Idea, _) => {
-				return <Card key={_} idea={idea} />;
-			})}
-			<button className={'outline ' + styles.card} onClick={handleAddIdea}>
-				<svg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px'>
-					<path d='M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z' />
-				</svg>
-				<p>Add</p>
-			</button>
-		</div>
-	) : (
-		<div className='flex-col flex-gap'>
-			<p className='label'>Lets add some ideas.</p>
-			<button className='btn' onClick={handleAddIdea}>
-				<svg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px'>
-					<path d='M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z' />
-				</svg>
-				<p>Add</p>
-			</button>
+	return (
+		<div className={'center ' + styles.wrapper}>
+			{ideas.length < 1 && <p className='label'>Lets add some ideas.</p>}
+			<div className={styles.grid}>
+				{ideas.map((idea: Ideas.Idea, _) => {
+					return <Card key={_} idea={idea} />;
+				})}
+				<button className={'outline ' + styles.card + ' ' + styles.add} onClick={handleAddIdea}>
+					<svg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px'>
+						<path d='M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z' />
+					</svg>
+					<p>Add</p>
+				</button>
+			</div>
 		</div>
 	);
 };

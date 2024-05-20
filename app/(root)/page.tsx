@@ -35,7 +35,7 @@ const Page: React.FC = () => {
 
 	return (
 		<div className={'full center ' + styles.home}>
-			<h2 className='center-text'>{getIntroduction()} Tim.</h2>
+			<h2 className='center-text'>{getIntroduction()} Tim</h2>
 			<Dashboard />
 			<svg viewBox='0 0 1800 1800' width='80vw' fill='none' xmlns='http://www.w3.org/2000/svg'>
 				<circle cx='900' cy='900' r='900' fill='url(#circle)'></circle>

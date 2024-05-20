@@ -48,7 +48,7 @@
   --border-radius: 15px;
   --focus: 4px solid var(--link);
 
-  --font-mono: 'Roboto Mono', ui-monospace, monospace;
+  --font-mono: 'Roboto Mono', 'Consolas', ui-monospace, monospace;
 
   font-size: 16px;
   line-height: 1;
