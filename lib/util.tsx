@@ -1,32 +1,37 @@
 import { notifications } from '@mantine/notifications';
 import { modals } from '@mantine/modals';
 
+type Queries = {
+	[key: string]: string;
+};
+
 interface ModalFormProps {
 	title: string;
 	options: string[];
-	callback: (queries: string[]) => void;
+	callback: (queries: Queries) => void;
 	successMessage: string;
+	errorMessage?: string;
 }
 
-export const openModalForm = ({ title, options, callback, successMessage }: ModalFormProps) => {
+export const openModalForm = ({ title, options, callback, successMessage, errorMessage }: ModalFormProps) => {
 	modals.open({
 		title: title,
 		children: (
 			<form
 				className='flex-col'
 				action={(query: any) => {
-					const queries = {};
-					
-					options.forEach((option) => {
-						const input = query.get(option);
+					const queries: Queries = {};
 
-						if ( input.length < 1 || input.length > 200 ) {
-							notifications.show({ title: 'Sorry!', message: 'Please provide 1-200 letters each.' });
+					for (let i = 0; i < options.length; i++) {
+						const input = query.get(options[i]);
+
+						if (input.length < 1 || input.length > 200) {
+							notifications.show({ title: 'Sorry!', message: errorMessage ?? 'Please provide 1-200 letters each.' });
 							return;
 						}
 
-						queries[option] = input;
-					})
+						queries[options[i]] = input;
+					}
 
 					callback(queries);
 
@@ -37,7 +42,7 @@ export const openModalForm = ({ title, options, callback, successMessage }: Moda
 					modals.closeAll();
 				}}>
 				{options.map((option) => {
-					return <input className='input' placeholder={option + '...'} name={option} />;
+					return <input key={option} className='input' placeholder={option + '...'} name={option} />;
 				})}
 				<button className='btn' type='submit'>
 					Okay
@@ -45,4 +50,4 @@ export const openModalForm = ({ title, options, callback, successMessage }: Moda
 			</form>
 		),
 	});
-}
+};

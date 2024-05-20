@@ -13,7 +13,6 @@ namespace Ideas {
 	interface Idea {
 		name: string;
 		description: string;
-		id: number;
 		tag: Tags | Tags[];
 	}
 

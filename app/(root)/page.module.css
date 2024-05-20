@@ -5,11 +5,11 @@
 }
 
 .grid {
-   display: grid;
+   display: flex;
+   flex-direction: column;
+
    gap: 20px;
    width: 100%;
-
-   z-index: 5;
 }
 
 .wrapper {
@@ -45,22 +45,35 @@
    display: flex;
    flex-direction: column;
    gap: 10px;
+
+   cursor: pointer;
+
 }
 
-.card:hover {
+.card:hover:not(:has(.options:hover)) {
    background-color: var(--button-color-low);
    outline-color: var(--link);
 }
 
 .add {
-   cursor: pointer;
+   display: flex;
+   align-items: center;
+   justify-content: center;
 }
 
 .options {
    position: absolute;
+   display: flex;
 
    top: 0;
    right: 0;
+   z-index: 50;
 
    padding: 10px;
+   cursor: pointer;
+   border-radius: var(--border-radius);
+}
+
+.options:hover {
+   background-color: var(--button-color-low);
 }

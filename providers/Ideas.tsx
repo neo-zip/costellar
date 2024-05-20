@@ -46,28 +46,28 @@ export const IdeasProvider = ({ children }: { children: React.ReactNode }) => {
 		setIdeas([...ideas, idea]);
 	};
 
-	const getIdea = (id: number): Ideas.Idea | undefined => {
+	const getIdea = (index: number): Ideas.Idea | undefined => {
 		if (!ideas) {
 			return;
 		}
 
-		return ideas.find((idea) => idea.id === id);
+		return ideas.find((_, i) => i === index);
 	};
 
-	const editIdea = (id: number, updatedIdea: Ideas.Idea) => {
+	const editIdea = (index: number, updatedIdea: Ideas.Idea) => {
 		if (!ideas) {
 			return;
 		}
 
-		setIdeas(ideas.map((idea, index) => (index === id ? updatedIdea : idea)));
+		setIdeas(ideas.map((idea, i) => (i === index ? updatedIdea : idea)));
 	};
 
-	const deleteIdea = (id: number) => {
+	const deleteIdea = (index: number) => {
 		if (!ideas) {
 			return;
 		}
 
-		setIdeas(ideas.filter((idea) => idea.id === id));
+		setIdeas(ideas.filter((_, i) => i != index));
 	};
 
 	return <IdeasContext.Provider value={{ addIdea, getIdea, editIdea, deleteIdea, ideas }}>{children}</IdeasContext.Provider>;
