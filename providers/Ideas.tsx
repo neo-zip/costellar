@@ -1,6 +1,5 @@
 'use client';
 
-import { log } from '@/lib/util';
 import { createContext, useEffect, useState } from 'react';
 
 interface IdeasValues {
@@ -26,18 +25,17 @@ export const IdeasProvider = ({ children }: { children: React.ReactNode }) => {
 
 	useEffect(() => {
 		if (typeof window === 'undefined') {
-			log('Cannot access localstorage on server: skipping data.');
 			return;
 		}
 
 		if (!ideas) {
 			setIdeas(JSON.parse(window.localStorage.getItem('ideas') ?? '[]'));
-			log('Loaded Ideas');
+			console.log('Loaded Ideas');
 			return;
 		}
 
 		window.localStorage.setItem('ideas', JSON.stringify(ideas));
-		log('Saved Ideas');
+		console.log('Saved Ideas');
 	}, [ideas]);
 
 	const addIdea = (idea: Ideas.Idea) => {

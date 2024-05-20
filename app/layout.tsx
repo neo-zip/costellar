@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import '@/styles/globals.css';
 import { ThemeProvider } from '@/providers/Theme';
 import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
 import { MantineProvider } from '@mantine/core';
+import '@/styles/globals.css';
 
 const inter = Inter({ weight: ['400', '700'], subsets: ['latin'] });
 

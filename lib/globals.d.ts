@@ -4,7 +4,7 @@ namespace Theme {
 
 	interface Themes {
 		scheme: Schemes;
-		readonly value: Values;
+		value: Values;
 		accent: string;
 	}
 }

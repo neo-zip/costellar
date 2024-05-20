@@ -47,10 +47,20 @@
    gap: 10px;
 }
 
+.card:hover {
+   background-color: var(--button-color-low);
+   outline-color: var(--link);
+}
+
 .add {
    cursor: pointer;
 }
 
-.add:hover {
-   background-color: var(--button-color-low);
+.options {
+   position: absolute;
+
+   top: 0;
+   right: 0;
+
+   padding: 10px;
 }

@@ -1,7 +1,7 @@
 class Ideas {
 	save = async (ideas: Ideas.Idea[]) => {};
 
-	get = async (ideas: Ideas.Idea[]) => {};
+	get = async (id: number) => {};
 
 	update = async (ideas: Ideas.Idea[]) => {};
 
