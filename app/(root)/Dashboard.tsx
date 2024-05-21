@@ -8,7 +8,8 @@ import styles from './page.module.css';
 import Loading from '../loading';
 
 const Dashboard: React.FC = () => {
-	const { ideas, addIdea } = useContext(IdeasContext);
+	const { getRandomIdeas, addIdea } = useContext(IdeasContext);
+	const ideas = getRandomIdeas();
 
 	if (!ideas) {
 		return (

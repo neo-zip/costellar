@@ -1,5 +1,9 @@
+'use client';
+
 import Dashboard from './Dashboard';
+import Nav from './Nav';
 import styles from './page.module.css';
+import useColor from './useColor';
 
 const getIntroduction = () => {
 	const hour = new Date().getHours();
@@ -19,22 +23,12 @@ const getIntroduction = () => {
 	return 'Good morning';
 };
 
-const getColors = () => {
-	const colors = [
-		{ start: '#74b8e8', end: '#5234eb' },
-		{ start: '#74b8e8', end: '#6195ba' },
-		{ start: '#aa0000', end: '#880000' },
-		{ start: '#e67ec5', end: '#a64e8a' },
-	];
-
-	return colors[Math.floor(Math.random() * colors.length)];
-};
-
 const Page: React.FC = () => {
-	const colors = getColors();
+	const { colors, fetchNewColor } = useColor();
 
 	return (
 		<div className={'full center ' + styles.home}>
+			<Nav changeColor={fetchNewColor} />
 			<h2 className='center-text'>{getIntroduction()} Tim</h2>
 			<Dashboard />
 			<svg viewBox='0 0 1800 1800' width='80vw' fill='none' xmlns='http://www.w3.org/2000/svg'>

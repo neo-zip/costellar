@@ -1,12 +1,13 @@
 'use client';
 
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 
 interface IdeasValues {
 	addIdea: (idea: Ideas.Idea) => void;
 	getIdea: (id: number) => Ideas.Idea | undefined;
 	editIdea: (id: number, updatedIdea: Ideas.Idea) => void;
 	deleteIdea: (id: number) => void;
+	getRandomIdeas: () => Ideas.Idea[] | null;
 	ideas: Ideas.Idea[] | null;
 }
 
@@ -16,12 +17,11 @@ export const IdeasContext = createContext<IdeasValues>({
 	getIdea: () => undefined,
 	editIdea: () => {},
 	deleteIdea: () => {},
+	getRandomIdeas: () => null,
 });
 
 export const IdeasProvider = ({ children }: { children: React.ReactNode }) => {
 	const [ideas, setIdeas] = useState<Ideas.Idea[] | null>(null);
-
-	console.log(ideas);
 
 	useEffect(() => {
 		if (typeof window === 'undefined') {
@@ -38,6 +38,26 @@ export const IdeasProvider = ({ children }: { children: React.ReactNode }) => {
 		console.log('Saved Ideas');
 	}, [ideas]);
 
+	const useRandomIdeas = () => {
+		if (!ideas) {
+			return null;
+		}
+
+		if (ideas.length < 3) {
+			return { ideas };
+		}
+
+		const [randomIdeas, setRandomIdeas] = useState<Ideas.Idea>();
+
+		const shuffleIdeas = useCallback(() => {
+			const shuffled = ideas;
+			shuffled.sort(() => Math.random() - 0.5);
+			return shuffled.slice(0, 3);
+		}, []);
+
+		return { randomIdeas, shuffleIdeas };
+	};
+
 	const addIdea = (idea: Ideas.Idea) => {
 		if (!ideas) {
 			return;
@@ -46,7 +66,7 @@ export const IdeasProvider = ({ children }: { children: React.ReactNode }) => {
 		setIdeas([...ideas, idea]);
 	};
 
-	const getIdea = (index: number): Ideas.Idea | undefined => {
+	const getIdea = (index: number) => {
 		if (!ideas) {
 			return;
 		}
@@ -70,5 +90,9 @@ export const IdeasProvider = ({ children }: { children: React.ReactNode }) => {
 		setIdeas(ideas.filter((_, i) => i != index));
 	};
 
-	return <IdeasContext.Provider value={{ addIdea, getIdea, editIdea, deleteIdea, ideas }}>{children}</IdeasContext.Provider>;
+	return (
+		<IdeasContext.Provider value={{ addIdea, getIdea, getRandomIdeas, editIdea, deleteIdea, ideas }}>
+			{children}
+		</IdeasContext.Provider>
+	);
 };
