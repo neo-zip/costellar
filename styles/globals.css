@@ -499,7 +499,7 @@ button {
 }
 
 .mantine-Modal-root:has(.mantine-Modal-overlay) {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
 
   display: grid;
@@ -516,6 +516,7 @@ button {
 }
 
 .mantine-Modal-inner {
+  margin: 37.5vh 37.5vw;
   background-color: var(--bg-h2);
 
   border-radius: var(--border-radius);
@@ -539,6 +540,10 @@ button {
 
 .mantine-Modal-body {
   gap: 0;
+}
+
+.mantine-Modal-body .input {
+  margin-bottom: 10px;
 }
 
 .mantine-Modal-body .btn {

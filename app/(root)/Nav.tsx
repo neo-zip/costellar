@@ -5,6 +5,8 @@ import { IdeasContext } from '@/providers/Ideas';
 import { ThemeContext } from '@/providers/Theme';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
+import { UserContext } from '@/providers/User';
+import { openModalForm } from '@/lib/util';
 
 interface P {
 	changeColor: () => void;
@@ -13,8 +15,9 @@ interface P {
 const Nav: React.FC<P> = ({ changeColor }) => {
 	const { ideas, shuffleIdeas, editIdea, deleteIdea } = useContext(IdeasContext);
 	const { theme, changeTheme } = useContext(ThemeContext);
+	const { user, updateUser } = useContext(UserContext);
 
-	if (!ideas) return;
+	if (!ideas || !user) return;
 
 	const viewCompleted = () => {
 		modals.open({
@@ -107,7 +110,7 @@ const Nav: React.FC<P> = ({ changeColor }) => {
 					{theme.scheme === 'dark' && (
 						<Menu.Item aria-label='Use System Scheme' onClick={() => changeTheme({ ...theme, scheme: 'system' })}>
 							<svg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px'>
-								<path d='M480-280q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM80-417q-26 0-44.5-18.5T17-480q0-26 18.5-44.5T80-543h80q26 0 44.5 18.5T223-480q0 26-18.5 44.5T160-417H80Zm720 0q-26 0-44.5-18.5T737-480q0-26 18.5-44.5T800-543h80q26 0 44.5 18.5T943-480q0 26-18.5 44.5T880-417h-80ZM480-737q-26 0-44.5-18.5T417-800v-80q0-26 18.5-44.5T480-943q26 0 44.5 18.5T543-880v80q0 26-18.5 44.5T480-737Zm0 720q-26 0-44.5-18.5T417-80v-80q0-26 18.5-44.5T480-223q26 0 44.5 18.5T543-160v80q0 26-18.5 44.5T480-17ZM210-661l-43-42q-19-18-18.5-44t18.5-46q18-19 44-19t45 19l43 43q18 18 17.5 43.5T299-662q-18 19-44 19.5T210-661Zm494 494-43-43q-18-18-18-43.5t18-44.5q18-19 44-18.5t45 18.5l43 41q19 18 18.5 44T793-167q-18 19-44 19t-45-19Zm-42-494q-19-18-18.5-44t18.5-45l41-43q18-19 44-18.5t46 18.5q19 18 19 44t-19 45l-43 43q-18 18-43.5 17.5T662-661ZM167-167q-19-18-19-44t19-45l43-43q18-18 43.5-18t44.5 18q19 18 18.5 44T298-210l-41 43q-18 19-44 18.5T167-167Z' />
+								<path d='M261-478q0 39 15.5 77t47.5 72l2 2v-26q0-20 14-33.5t34-13.5q20 0 33.5 13.5T421-353v150q0 26-18.5 44.5T358-140H209q-20 0-33.5-14T162-188q0-20 14-33.5t34-13.5h29l-3-4q-53-52-77-114t-24-125q0-104 56.5-189T341-794q21-10 41 3.5t27 38.5q6 24-4 46.5T373-671q-51 29-81.5 80.5T261-478Zm438-4q0-39-15.5-77T636-631l-2-2v26q0 20-13.5 33.5T587-560q-20 0-34-14t-14-34v-149q0-26 18.5-44.5T602-820h149q20 0 33.5 13.5T798-773q0 20-13.5 34T751-725h-30l3 4q52 53 76.5 114.5T825-482q0 104-56.5 189T619-166q-21 10-41-3.5T551-208q-6-24 4-46.5t32-34.5q51-29 81.5-80.5T699-482Z' />
 							</svg>
 							<p>Use System Scheme</p>
 						</Menu.Item>
@@ -129,6 +132,27 @@ const Nav: React.FC<P> = ({ changeColor }) => {
 							<path d='M478-86q-133 0-237-78.5T101-366q-7-23 9-42t42-23q25-4 46.5 8.5T228-387q29 78 96.5 126.5T478-212q112 0 190-78t78-190q0-112-78-190t-190-78q-57 0-109 23.5T279-657h34q20 0 34 14t14 34q0 20-14 34.5T313-560H157q-26 0-44.5-18.5T94-623v-155q0-20 14-33.5t34-13.5q20 0 33.5 13.5T189-778v32q56-62 130.5-95T478-874q81 0 153 31t125.5 84.5Q810-705 841-633t31 153q0 81-31 153t-84.5 125.5Q703-148 631-117T478-86Zm50-410 91 90q14 14 14 34t-14 34q-14 14-34 14t-34-14L451-438q-9-9-13.5-20t-4.5-24v-151q0-20 14-33.5t34-13.5q20 0 33.5 13.5T528-633v137Z' />
 						</svg>
 						<p>View Completed</p>
+					</Menu.Item>
+
+					<Menu.Label>User</Menu.Label>
+					<Menu.Item
+						aria-label='Change Name'
+						onClick={() =>
+							openModalForm({
+								title: 'Change name',
+								options: ['name'],
+								callback: (queries) =>
+									updateUser({
+										...user,
+										name: queries.name,
+									}),
+								successMessage: "We've changed your identity!",
+							})
+						}>
+						<svg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px'>
+							<path d='M480-497q-81 0-137.5-56.5T286-691q0-81 56.5-137T480-884q81 0 137.5 56T674-691q0 81-56.5 137.5T480-497ZM126-235v-22q0-43 22.5-79.5T209-392q65-32 133-48.5T480-457q72 0 140 16t131 48q38 19 60.5 55t22.5 81v22q0 53-36.5 89.5T708-109H252q-53 0-89.5-36.5T126-235Z' />
+						</svg>
+						<p>Change Name</p>
 					</Menu.Item>
 				</Menu.Dropdown>
 			</Menu>
