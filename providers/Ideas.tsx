@@ -42,12 +42,14 @@ export const IdeasProvider = ({ children }: { children: React.ReactNode }) => {
 			return;
 		}
 
-		if (ideas.length < 3) {
-			setRandom(ideas);
+		const avaliable = ideas.filter((idea) => !idea.completed);
+
+		if (avaliable.length < 3) {
+			setRandom(avaliable);
 			return;
 		}
 
-		setRandom(shuffle(ideas).slice(0, 3));
+		setRandom(shuffle(avaliable).slice(0, 3));
 	};
 
 	useEffect(() => {

@@ -51,7 +51,14 @@
 
 }
 
-.card:hover:not(:has(.options:hover)) {
+.card button {
+   cursor: pointer;
+
+}
+
+.card:hover:not(:has(.options:hover)),
+.card:focus-visible:not(:has(.options)),
+.card:has(>button:focus-visible) {
    background-color: var(--button-color-low);
    outline-color: var(--link);
 }
@@ -80,6 +87,26 @@
    border-radius: var(--border-radius);
 }
 
+.options button:focus-visible,
 .options button:hover {
    background-color: var(--button-color-low);
+}
+
+.remove {
+   background-color: color-mix(in srgb, var(--error) 75%, var(--bg-h2));
+   border-radius: 50%;
+
+   display: flex;
+   cursor: pointer;
+   transition: var(--transition);
+}
+
+.remove:hover,
+.remove:focus-visible {
+   background-color: var(--error);
+}
+
+.seperator {
+   text-align: start;
+   margin-top: 20px;
 }

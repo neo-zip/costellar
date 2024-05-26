@@ -5,6 +5,7 @@ import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
 import { MantineProvider } from '@mantine/core';
 import '@/styles/globals.css';
+import { UserProvider } from '@/providers/User';
 
 const inter = Inter({ weight: ['400', '700'], subsets: ['latin'] });
 
@@ -19,12 +20,14 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en'>
-			<ThemeProvider font={inter.className}>
-				<MantineProvider>
-					<Notifications autoClose={5000} />
-					<ModalsProvider>{children}</ModalsProvider>
-				</MantineProvider>
-			</ThemeProvider>
+			<UserProvider>
+				<ThemeProvider font={inter.className}>
+					<MantineProvider>
+						<Notifications autoClose={5000} />
+						<ModalsProvider>{children}</ModalsProvider>
+					</MantineProvider>
+				</ThemeProvider>
+			</UserProvider>
 		</html>
 	);
 }

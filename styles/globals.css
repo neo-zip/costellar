@@ -40,7 +40,7 @@
 
   --success: #0b953b;
   --warn: #f8be1b;
-  --error: #aa0000;
+  --error: #900000;
   --link: #539BF5;
 
   --transition: cubic-bezier(0, 1, .74, 1) .3s;
@@ -264,7 +264,6 @@ button {
 
 .input {
   padding: 20px 20px;
-  margin-bottom: 15px;
 
   height: 50px;
   min-width: 400px;
@@ -352,7 +351,7 @@ button {
 .a {
   cursor: pointer;
   display: inline-flex;
-  color: var(--link);
+  color: var(--color, var(--link));
 }
 
 .a:hover,
@@ -384,17 +383,7 @@ button {
   outline: var(--focus);
 }
 
-.disabled {
-  color: var(--disabled) !important;
-  fill: var(--disabled) !important;
-  cursor: not-allowed !important;
-}
 
-.muted {
-  color: var(--muted) !important;
-  fill: var(--muted) !important;
-  cursor: not-allowed !important;
-}
 
 /* text */
 
@@ -407,7 +396,8 @@ button {
   -webkit-text-fill-color: transparent;
 }
 
-.label {
+.label,
+.mantine-Menu-label {
   font-size: 0.8em;
   color: var(--text-h2);
   text-transform: uppercase;
@@ -557,4 +547,71 @@ button {
 
 .mantine-Modal-title {
   font-size: 2em;
+  margin-right: 75px;
+}
+
+.mantine-Menu-dropdown {
+  z-index: 250;
+  position: absolute;
+  overflow: hidden;
+
+  background-color: var(--bg-h2);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+}
+
+.mantine-Menu-itemLabel {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--transition);
+
+  color: var(--color, --text-h2);
+  fill: var(--color, --text-h2);
+}
+
+.mantine-Menu-itemLabel:hover,
+.mantine-Menu-item:focus-visible .mantine-Menu-itemLabel {
+  background-color: color-mix(in srgb, var(--color, var(--button-color-low)) 60%, var(--bg-h2));
+  color: var(--text, var(--link));
+  fill: var(--text, var(--link));
+}
+
+.mantine-Menu-label {
+  padding: 20px;
+  padding-bottom: 5px;
+}
+
+.mantine-Menu-label:not(:nth-child(2)) {
+  border-top: 2px solid color-mix(in srgb, var(--color, var(--button-color-low)) 60%, var(--bg-h2));
+}
+
+/* disabled */
+
+.disabled,
+.disabled:hover {
+  color: var(--disabled) !important;
+  fill: var(--disabled) !important;
+  cursor: not-allowed !important;
+}
+
+.disabled>* {
+  pointer-events: none;
+}
+
+.muted {
+  color: var(--muted) !important;
+  fill: var(--muted) !important;
+  cursor: not-allowed !important;
 }

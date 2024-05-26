@@ -26,18 +26,18 @@ export const ThemeContext = createContext<ThemeValues>({
 });
 
 export const ThemeProvider: React.FC<P> = ({ children, font }) => {
-	const systemScheme = useColorScheme();
-
 	const [theme, setTheme] = useState<Theme.Themes>(initial);
+	const systemScheme = useColorScheme();
 
 	useEffect(() => {
 		changeTheme({
 			...theme,
+			scheme: 'system',
 			value: systemScheme,
 		});
 	}, [systemScheme]);
 
-	const changeTheme = (to: Theme.Themes) => {
+	const changeTheme = (to: PartialOnly<Theme.Themes, 'value'>) => {
 		if (to.scheme === 'system') {
 			setTheme({
 				accent: to.accent,

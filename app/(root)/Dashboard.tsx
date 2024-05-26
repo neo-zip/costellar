@@ -1,11 +1,12 @@
 'use client';
 
 import { IdeasContext } from '@/providers/Ideas';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { openModalForm } from '@/lib/util';
 import Card from './Card';
 import styles from './page.module.css';
 import Loading from '../loading';
+import { AnimatePresence } from 'framer-motion';
 
 const Dashboard: React.FC = () => {
 	const { random, addIdea } = useContext(IdeasContext);
@@ -27,6 +28,7 @@ const Dashboard: React.FC = () => {
 					name: queries.name,
 					tag: 'Web',
 					description: queries.description,
+					completed: false,
 				}),
 			successMessage: "We've added your idea.",
 		});
@@ -34,15 +36,15 @@ const Dashboard: React.FC = () => {
 
 	return (
 		<div className={'center ' + styles.wrapper}>
-			{random.length < 1 && <h3 style={{ marginBottom: 20 }}>Lets add some ideas</h3>}
+			{random.length < 1 && <h3 style={{ marginBottom: 20 }}>Let&apos;s cook up some ideas</h3>}
 			<div className={styles.grid}>
 				{random.map((idea: Ideas.Idea, i) => {
-					return <Card key={i} idea={idea} />;
+					return <AnimatePresence key={i}>{!idea.completed && <Card index={i} idea={idea} />}</AnimatePresence>;
 				})}
 				<button className={'outline ' + styles.card + ' ' + styles.add} onClick={handleAddIdea}>
 					<div className='flex-gap flex-align'>
 						<svg xmlns='http://www.w3.org/2000/svg' height='24px' viewBox='0 -960 960 960' width='24px'>
-							<path d='m98-537 168-168q14-14 33-20t39-2l52 11q-54 64-85 116t-60 126L98-537Zm205 91q23-72 62.5-136T461-702q88-88 201-131.5T873-860q17 98-26 211T716-448q-55 55-120 95.5T459-289L303-446Zm276-120q23 23 56.5 23t56.5-23q23-23 23-56.5T692-679q-23-23-56.5-23T579-679q-23 23-23 56.5t23 56.5ZM551-85l-64-147q74-29 126.5-60T730-377l10 52q4 20-2 39.5T718-252L551-85ZM162-318q35-35 85-35.5t85 34.5q35 35 35 85t-35 85q-25 25-83.5 43T87-74q14-103 32-161t43-83Z' />
+							<path d='M224-491q32-78 75.5-149T397-776l-57-11q-31-6-61 3t-53 32L109-635q-23 23-17 55.5t36 46.5l96 42Zm646-432q-109 2-208 44T486-760q-54 54-95 115.5T318-515q-9 20-7.5 41.5T327-437l123 123q15 15 36.5 16.5T528-306q67-33 129-73.5T773-474q77-77 119-175.5T936-857q0-13-5.5-25T916-903q-9-9-21-14.5t-25-5.5ZM614-602q-21-21-21-51t21-51q21-21 51.5-21t51.5 21q21 21 21 51t-21 51q-21 21-51.5 21T614-602ZM504-212l41 97q14 31 46.5 37T648-96l117-117q23-23 32-53t3-61l-11-57q-65 54-136 97t-149 75ZM119-316q45-45 107-45t107 45q45 45 45 107t-45 107q-58 58-139.5 70T30-13q7-82 19-163.5T119-316Z' />
 						</svg>
 						<b>Start a New Idea</b>
 					</div>
