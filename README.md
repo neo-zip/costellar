@@ -8,6 +8,7 @@ On windows for wall paper engine
 
 -  Clone the repo
 -  `npm i`
+-  `npm run start`
 -  Make a shortcut in your starter folder to `runner.vbs`
 -  Update the path in `server.bat` to the repo location
 -  Optional - change the port (default is localhost:3001) in `package.json`
