@@ -1,27 +1,54 @@
 'use client';
 
+import { shuffle } from '@/lib/util';
 import { createContext, useCallback, useEffect, useState } from 'react';
 
+type RandomIdeas =
+	| null
+	| { ideas: Ideas.Idea[] }
+	| {
+			randomIdeas: Ideas.Idea[];
+			shuffleIdeas: () => void;
+	  };
+
 interface IdeasValues {
-	addIdea: (idea: Ideas.Idea) => void;
+	addIdea: (idea: PartialOnly<Ideas.Idea, 'id'>) => void;
 	getIdea: (id: number) => Ideas.Idea | undefined;
 	editIdea: (id: number, updatedIdea: Ideas.Idea) => void;
 	deleteIdea: (id: number) => void;
-	getRandomIdeas: () => Ideas.Idea[] | null;
-	ideas: Ideas.Idea[] | null;
+	shuffleIdeas: () => void;
+	ideas: Ideas.Idea[] | undefined;
+	random: Ideas.Idea[] | undefined;
 }
 
 export const IdeasContext = createContext<IdeasValues>({
-	ideas: null,
+	ideas: undefined,
+	random: undefined,
 	addIdea: () => {},
 	getIdea: () => undefined,
 	editIdea: () => {},
 	deleteIdea: () => {},
-	getRandomIdeas: () => null,
+	shuffleIdeas: () => {},
 });
 
+// using a provider and not /api because it should work offline
+
 export const IdeasProvider = ({ children }: { children: React.ReactNode }) => {
-	const [ideas, setIdeas] = useState<Ideas.Idea[] | null>(null);
+	const [ideas, setIdeas] = useState<Ideas.Idea[] | undefined>(undefined);
+	const [random, setRandom] = useState<Ideas.Idea[] | undefined>(undefined);
+
+	const shuffleIdeas = () => {
+		if (!ideas) {
+			return;
+		}
+
+		if (ideas.length < 3) {
+			setRandom(ideas);
+			return;
+		}
+
+		setRandom(shuffle(ideas).slice(0, 3));
+	};
 
 	useEffect(() => {
 		if (typeof window === 'undefined') {
@@ -38,60 +65,44 @@ export const IdeasProvider = ({ children }: { children: React.ReactNode }) => {
 		console.log('Saved Ideas');
 	}, [ideas]);
 
-	const useRandomIdeas = () => {
-		if (!ideas) {
-			return null;
-		}
+	useEffect(() => {
+		shuffleIdeas();
+	}, [ideas]);
 
-		if (ideas.length < 3) {
-			return { ideas };
-		}
-
-		const [randomIdeas, setRandomIdeas] = useState<Ideas.Idea>();
-
-		const shuffleIdeas = useCallback(() => {
-			const shuffled = ideas;
-			shuffled.sort(() => Math.random() - 0.5);
-			return shuffled.slice(0, 3);
-		}, []);
-
-		return { randomIdeas, shuffleIdeas };
-	};
-
-	const addIdea = (idea: Ideas.Idea) => {
+	const addIdea = (idea: PartialOnly<Ideas.Idea, 'id'>) => {
 		if (!ideas) {
 			return;
 		}
 
-		setIdeas([...ideas, idea]);
+		setIdeas([...ideas, { ...idea, id: ideas.length + 1 }]);
 	};
 
-	const getIdea = (index: number) => {
+	const getIdea = (id: number) => {
 		if (!ideas) {
 			return;
 		}
 
-		return ideas.find((_, i) => i === index);
+		return ideas.find((idea) => idea.id === id);
 	};
 
-	const editIdea = (index: number, updatedIdea: Ideas.Idea) => {
+	const editIdea = (id: number, updatedIdea: Ideas.Idea) => {
 		if (!ideas) {
 			return;
 		}
 
-		setIdeas(ideas.map((idea, i) => (i === index ? updatedIdea : idea)));
+		setIdeas(ideas.map((idea) => (idea.id === id ? updatedIdea : idea)));
 	};
 
-	const deleteIdea = (index: number) => {
+	const deleteIdea = (id: number) => {
 		if (!ideas) {
 			return;
 		}
 
-		setIdeas(ideas.filter((_, i) => i != index));
+		setIdeas(ideas.filter((idea) => idea.id != id));
 	};
 
 	return (
-		<IdeasContext.Provider value={{ addIdea, getIdea, getRandomIdeas, editIdea, deleteIdea, ideas }}>
+		<IdeasContext.Provider value={{ shuffleIdeas, addIdea, getIdea, editIdea, deleteIdea, ideas, random }}>
 			{children}
 		</IdeasContext.Provider>
 	);

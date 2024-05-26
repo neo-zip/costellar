@@ -7,10 +7,9 @@ import { m } from 'framer-motion';
 
 interface P {
 	idea: Ideas.Idea;
-	index: number;
 }
 
-const Card: React.FC<P> = ({ idea, index }) => {
+const Card: React.FC<P> = ({ idea }) => {
 	const { deleteIdea, editIdea } = useContext(IdeasContext);
 
 	const handleEdit = () => {
@@ -18,7 +17,7 @@ const Card: React.FC<P> = ({ idea, index }) => {
 			title: 'Editing Idea',
 			options: ['name', 'description'],
 			callback: (queries) =>
-				editIdea(index, {
+				editIdea(idea.id, {
 					...idea,
 					name: queries.name,
 					description: queries.description,
@@ -29,7 +28,7 @@ const Card: React.FC<P> = ({ idea, index }) => {
 
 	return (
 		<m.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className={'outline ' + styles.card}>
-			<div className='flex-gap flex-col' onClick={() => deleteIdea(index)}>
+			<div className='flex-gap flex-col' onClick={() => deleteIdea(idea.id)}>
 				<h2>{idea.name}</h2>
 				<p>{idea.description}</p>
 			</div>

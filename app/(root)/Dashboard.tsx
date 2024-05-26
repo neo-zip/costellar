@@ -8,10 +8,9 @@ import styles from './page.module.css';
 import Loading from '../loading';
 
 const Dashboard: React.FC = () => {
-	const { getRandomIdeas, addIdea } = useContext(IdeasContext);
-	const ideas = getRandomIdeas();
+	const { random, addIdea } = useContext(IdeasContext);
 
-	if (!ideas) {
+	if (!random) {
 		return (
 			<div className='center full'>
 				<Loading />
@@ -35,10 +34,10 @@ const Dashboard: React.FC = () => {
 
 	return (
 		<div className={'center ' + styles.wrapper}>
-			{ideas.length < 1 && <h3 style={{ marginBottom: 20 }}>Lets add some ideas</h3>}
+			{random.length < 1 && <h3 style={{ marginBottom: 20 }}>Lets add some ideas</h3>}
 			<div className={styles.grid}>
-				{ideas.map((idea: Ideas.Idea, i) => {
-					return <Card key={i} index={i} idea={idea} />;
+				{random.map((idea: Ideas.Idea, i) => {
+					return <Card key={i} idea={idea} />;
 				})}
 				<button className={'outline ' + styles.card + ' ' + styles.add} onClick={handleAddIdea}>
 					<div className='flex-gap flex-align'>

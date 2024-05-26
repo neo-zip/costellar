@@ -1,6 +1,19 @@
 import { notifications } from '@mantine/notifications';
 import { modals } from '@mantine/modals';
 
+export function shuffle(array: any[]) {
+	if (!array || array.length < 1) {
+		throw new Error('Array not long enough');
+	}
+
+	for (let i = array.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[array[i], array[j]] = [array[j], array[i]];
+	}
+
+	return array;
+}
+
 type Queries = {
 	[key: string]: string;
 };

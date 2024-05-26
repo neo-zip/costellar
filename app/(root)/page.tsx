@@ -3,7 +3,7 @@
 import Dashboard from './Dashboard';
 import Nav from './Nav';
 import styles from './page.module.css';
-import useColor from './useColor';
+import useColor from '../../components/hooks/useColor';
 
 const getIntroduction = () => {
 	const hour = new Date().getHours();

@@ -11,6 +11,7 @@ namespace Theme {
 
 namespace Ideas {
 	interface Idea {
+		id: number;
 		name: string;
 		description: string;
 		tag: Tags | Tags[];
@@ -18,3 +19,5 @@ namespace Ideas {
 
 	type Tags = 'Web' | 'App' | 'Business';
 }
+
+type PartialOnly<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
